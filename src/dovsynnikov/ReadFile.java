@@ -1,6 +1,7 @@
 package dovsynnikov;
 
 import java.io.*;
+import java.lang.ref.WeakReference;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;

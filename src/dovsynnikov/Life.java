@@ -1,8 +1,11 @@
 package dovsynnikov;
 
 import edu.princeton.cs.introcs.StdDraw;
+import gnu.trove.procedure.TObjectProcedure;
+import gnu.trove.set.hash.THashSet;
 
 import java.awt.*;
+import java.lang.ref.WeakReference;
 import java.nio.charset.Charset;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -15,11 +18,11 @@ public class Life {
     private static int centerX = 5000;
     private static int centerY = -5000;
 
-    public static HashSet<Cell> currentLife = new HashSet<>();
-    public static HashSet<Cell> nextStepLife = new HashSet<>();
-    public static HashSet<Cell> neighborhoodOfCells = new HashSet<>();
+    public static THashSet<Cell> currentLife = new THashSet<>();
+    public static THashSet<Cell> nextStepLife = new THashSet<>();
+    public static THashSet<Cell> neighborhoodOfCells = new THashSet<>();
 
-    static String fileName = "demonoid_synth.rle";
+    static String fileName = "caterpillar.rle";
 
     public static void main(String[] args) {
 
@@ -29,13 +32,6 @@ public class Life {
 
         createField();
         runLife();
-
-        //вывод в консоль начальных точек
-        /*Iterator<Cell> i = currentLife.iterator();
-        while (i.hasNext()) {
-            System.out.println(i.next().toString());
-        }*/
-        //drawCurrentLife();
     }
 
     private static void createField() {
@@ -160,6 +156,9 @@ public class Life {
 
             if (currentLife.contains(nbCell)) {
                 cnt++;
+            } else {
+                WeakReference<Cell> cellWeakReference = new WeakReference<>(nbCell);
+                nbCell = null;
             }
         }
 
@@ -168,7 +167,9 @@ public class Life {
 
     private static void change() {
 
-        HashSet<Cell> tmp;
+        long start = System.currentTimeMillis();
+
+        THashSet<Cell> tmp;
 
         // проверка живых клеток
         for (Cell c : currentLife) {
@@ -177,6 +178,8 @@ public class Life {
 
             if (((nb == 2) || (nb == 3))) {
                 nextStepLife.add(c);
+            } else {
+                WeakReference<Cell> cellWeakReference = new WeakReference<>(c);
             }
         }
 
@@ -185,6 +188,8 @@ public class Life {
 
             if (countNeighboursForRevival(c) == 3) {
                 nextStepLife.add(c);
+            } else {
+                WeakReference<Cell> cellWeakReference = new WeakReference<>(c);
             }
         }
 
@@ -192,5 +197,9 @@ public class Life {
         tmp = currentLife;
         currentLife = nextStepLife;
         nextStepLife = tmp;
+
+        long finish = System.currentTimeMillis();
+
+        System.out.println("Время рассчета след. поколения: " + (finish - start));
     }
 }

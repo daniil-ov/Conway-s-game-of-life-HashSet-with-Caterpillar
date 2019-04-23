@@ -1,5 +1,7 @@
 package dovsynnikov;
 
+import java.lang.ref.WeakReference;
+
 public class Cell {
     public int y;
     public int x;
@@ -36,6 +38,7 @@ public class Cell {
     }
 
     public static Cell[] neighbours(Cell c) {
+
         return new Cell[]{
                 new Cell(c.y - 1, c.x - 1),
                 new Cell(c.y - 1, c.x),
