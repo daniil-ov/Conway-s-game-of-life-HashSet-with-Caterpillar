@@ -13,10 +13,19 @@ import static dovsynnikov.Life.currentLife;
 
 public class ReadFile {
 
+
     static Integer tmpCursorY = 0;
     static Integer tmpCursorX = 0;
 
     public static void read(String fileName, Charset cs) {
+
+        String regex = "\\d{0,}[ob$]";
+        Pattern pattern = Pattern.compile(regex);
+
+        String regex2 = "\\d{1,}";
+        Pattern pattern2 = Pattern.compile(regex2);
+
+        long start = System.currentTimeMillis();
 
         try {
             Path path = Paths.get(fileName);
@@ -32,16 +41,12 @@ public class ReadFile {
                 } else if ((Character.isLetterOrDigit(line.charAt(0))) || (line.charAt(0) == '$')) {
 
                     Integer cntCell;
-                    String regex = "\\d{0,}[ob$]";
-                    Pattern pattern = Pattern.compile(regex);
+
                     Matcher matcher = pattern.matcher(line);
 
                     while (matcher.find()) {
 
                         String tmpLine = line.substring(matcher.start(), matcher.end());
-
-                        String regex2 = "\\d{1,}";
-                        Pattern pattern2 = Pattern.compile(regex2);
                         Matcher matcher2 = pattern2.matcher(tmpLine);
 
                         if (matcher2.find()) {
@@ -64,6 +69,10 @@ public class ReadFile {
 
             e.printStackTrace();
         }
+
+        long finish = System.currentTimeMillis();
+
+        System.out.println("Время чтения: " + (finish - start));
     }
 
     private static void fillingField(String typeAction, Integer cntCell) {

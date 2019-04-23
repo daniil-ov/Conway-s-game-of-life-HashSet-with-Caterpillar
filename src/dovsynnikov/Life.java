@@ -10,16 +10,16 @@ import java.util.Iterator;
 public class Life {
 
     private static int widthField = 10000;
-    private static int heightField = 100000;
+    private static int heightField = 10000;
 
     private static int centerX = 5000;
-    private static int centerY = -50000;
+    private static int centerY = -5000;
 
     public static HashSet<Cell> currentLife = new HashSet<>();
     public static HashSet<Cell> nextStepLife = new HashSet<>();
     public static HashSet<Cell> neighborhoodOfCells = new HashSet<>();
 
-    static String fileName = "caterpillar.rle";
+    static String fileName = "demonoid_synth.rle";
 
     public static void main(String[] args) {
 
@@ -31,11 +31,11 @@ public class Life {
         runLife();
 
         //вывод в консоль начальных точек
-        Iterator<Cell> i = currentLife.iterator();
+        /*Iterator<Cell> i = currentLife.iterator();
         while (i.hasNext()) {
             System.out.println(i.next().toString());
-        }
-        drawCurrentLife();
+        }*/
+        //drawCurrentLife();
     }
 
     private static void createField() {
@@ -115,6 +115,8 @@ public class Life {
 
     private static void drawCurrentLife() {
 
+        long start = System.currentTimeMillis();
+
         StdDraw.clear();
 
         StdDraw.setXscale(centerX - (widthField / 2), centerX + (widthField / 2));
@@ -126,6 +128,10 @@ public class Life {
         }
 
         StdDraw.show();
+
+        long finish = System.currentTimeMillis();
+
+        System.out.println("Время отрисовки: " + (finish - start));
     }
 
     private static int countNeighboursAndRememberNeighborhood(Cell c) {
