@@ -1,12 +1,18 @@
 package dovsynnikov;
 
-import java.lang.ref.WeakReference;
+import java.util.*;
 
 public class Cell {
+
     public int y;
     public int x;
 
     public Cell(int y, int x) {
+        this.y = y;
+        this.x = x;
+    }
+
+    public Cell() {
         this.y = y;
         this.x = x;
     }
@@ -37,17 +43,17 @@ public class Cell {
                 '}';
     }
 
-    public static Cell[] neighbours(Cell c) {
+    public static Collection<Cell> neighboursCell(Cell c) {
 
-        return new Cell[]{
-                new Cell(c.y - 1, c.x - 1),
+        List<Cell> neighboursCell = List.of(new Cell(c.y - 1, c.x - 1),
                 new Cell(c.y - 1, c.x),
                 new Cell(c.y - 1, c.x + 1),
                 new Cell(c.y, c.x - 1),
                 new Cell(c.y, c.x + 1),
                 new Cell(c.y + 1, c.x - 1),
                 new Cell(c.y + 1, c.x),
-                new Cell(c.y + 1, c.x + 1)
-        };
+                new Cell(c.y + 1, c.x + 1));
+
+        return neighboursCell;
     }
 }

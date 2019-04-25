@@ -1,13 +1,10 @@
 package dovsynnikov;
 
 import edu.princeton.cs.introcs.StdDraw;
-import gnu.trove.procedure.TObjectProcedure;
 import gnu.trove.set.hash.THashSet;
 
 import java.awt.*;
-import java.lang.ref.WeakReference;
 import java.nio.charset.Charset;
-import java.util.HashSet;
 import java.util.Iterator;
 
 public class Life {
@@ -45,7 +42,6 @@ public class Life {
         currentLife.add(new Cell(1, 2));
         currentLife.add(new Cell(2, 1));*/
     }
-
 
     private static void runLife() {
 
@@ -132,15 +128,22 @@ public class Life {
 
     private static int countNeighboursAndRememberNeighborhood(Cell c) {
 
+        int[] tmpY = {c.y - 1, c.y - 1, c.y - 1, c.y, c.y, c.y + 1, c.y + 1, c.y + 1};
+        int[] tmpX = {c.x - 1, c.x, c.x + 1, c.x - 1, c.x + 1, c.x - 1, c.x, c.x + 1};
+
         int cnt = 0;
 
-        Cell[] neighboursCell = Cell.neighbours(c);
-        for (Cell nbCell : neighboursCell) {
+        for (int i = 0; i < 8; i++) {
 
-            if (currentLife.contains(nbCell)) {
+            Cell tmpCell = new Cell(tmpY[i], tmpX[i]);
+
+            if (currentLife.contains(tmpCell)) {
+
                 cnt++;
+
             } else {
-                neighborhoodOfCells.add(nbCell);
+
+                neighborhoodOfCells.add(tmpCell);
             }
         }
 
@@ -149,20 +152,23 @@ public class Life {
 
     private static int countNeighboursForRevival(Cell c) {
 
+        int[] tmpY = {c.y - 1, c.y - 1, c.y - 1, c.y, c.y, c.y + 1, c.y + 1, c.y + 1};
+        int[] tmpX = {c.x - 1, c.x, c.x + 1, c.x - 1, c.x + 1, c.x - 1, c.x, c.x + 1};
+
         int cnt = 0;
 
-        Cell[] neighboursCell = Cell.neighbours(c);
-        for (Cell nbCell : neighboursCell) {
+        for (int i = 0; i < 8; i++) {
 
-            if (currentLife.contains(nbCell)) {
+            Cell tmpCell = new Cell(tmpY[i], tmpX[i]);
+
+            if (currentLife.contains(tmpCell)) {
+
                 cnt++;
-            } else {
-                WeakReference<Cell> cellWeakReference = new WeakReference<>(nbCell);
-                nbCell = null;
             }
         }
 
         return cnt;
+
     }
 
     private static void change() {
@@ -178,8 +184,6 @@ public class Life {
 
             if (((nb == 2) || (nb == 3))) {
                 nextStepLife.add(c);
-            } else {
-                WeakReference<Cell> cellWeakReference = new WeakReference<>(c);
             }
         }
 
@@ -188,12 +192,12 @@ public class Life {
 
             if (countNeighboursForRevival(c) == 3) {
                 nextStepLife.add(c);
-            } else {
-                WeakReference<Cell> cellWeakReference = new WeakReference<>(c);
             }
         }
 
+        neighborhoodOfCells.clear();
         currentLife.clear();
+
         tmp = currentLife;
         currentLife = nextStepLife;
         nextStepLife = tmp;
